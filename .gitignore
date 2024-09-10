@@ -1,3 +1,14 @@
+# 忽略main下的编译后文件
+src/project01/main/*
+!src/project01/main/*.go
+# python
+*.ipynb
+# pkg目录是Go工具链自动生成的,go build会在pkg目录缓存编译后的包
+# 下载的依赖包会存于/mod/
+/pkg/
+/bin/
+/mod/
+/cache/
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
