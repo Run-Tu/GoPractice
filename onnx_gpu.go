@@ -18,7 +18,7 @@ func main() {
 	defer ort.DestroyEnvironment()
 
 	// 获取模型的输入和输出信息
-	inputs, outputs, err := ort.GetInputOutputInfo("../res/flag_embedding_model.onnx")
+	inputs, outputs, err := ort.GetInputOutputInfo("./res/flag_embedding_model.onnx")
 	if err != nil {
 		log.Fatalf("获取模型输入输出信息失败: %v", err)
 	}
@@ -68,6 +68,22 @@ func main() {
 	}
 	defer outputTensor.Destroy()
 
+	// 创建 SessionOptions
+	options, err := ort.NewSessionOptions()
+	if err != nil {
+		log.Fatalf("Failed to create session options: %v", err)
+	}
+	// 创建CUDA Provider Options
+	cudaOptions, err := ort.NewCUDAProviderOptions()
+	if err != nil {
+		log.Fatalf("Failed to append CUDA execution provider: %v", err)
+	}
+	defer cudaOptions.Destroy()
+	// 设置 CUDA 执行提供程序
+	err = options.AppendExecutionProviderCUDA(cudaOptions)
+	if err != nil {
+		log.Fatalf("Failed to append CUDA execution provider: %v", err)
+	}
 	// 创建会话
 	session, err := ort.NewAdvancedSession(
 		"../res/flag_embedding_model.onnx",
@@ -75,7 +91,7 @@ func main() {
 		outputNames,
 		[]ort.Value{inputIdsTensor, attentionMaskTensor, tokenTypeIDsTensor},
 		[]ort.Value{outputTensor},
-		nil,
+		options,
 	)
 	if err != nil {
 		log.Fatalf("Failed to create session: %v", err)
@@ -100,7 +116,7 @@ func main() {
 }
 
 func GetOnnxInput(sentence string) ([]int, []int, []int, error) {
-	tk, err := pretrained.FromFile("../res/tokenizer.json")
+	tk, err := pretrained.FromFile("./res/tokenizer.json")
 	if err != nil {
 		panic(err)
 	}
