@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sugarme/tokenizer/pretrained"
 	ort "github.com/yalue/onnxruntime_go"
 )
 
@@ -98,26 +97,4 @@ func TestOnnxCPU(t *testing.T) {
 
 	duration := time.Since(start)
 	fmt.Printf("推理时间: %v\n", duration)
-}
-
-func GetOnnxInput(sentence string) ([]int, []int, []int, error) {
-	tk, err := pretrained.FromFile("../res/tokenizer.json")
-	if err != nil {
-		panic(err)
-	}
-	encoding, err := tk.EncodeSingle(sentence)
-	if err != nil {
-		log.Fatal(err)
-		return nil, nil, nil, err
-	}
-
-	return encoding.Ids, encoding.AttentionMask, encoding.TypeIds, err
-}
-
-func convertToInt64Slice(data []int) []int64 {
-	result := make([]int64, len(data))
-	for i, v := range data {
-		result[i] = int64(v)
-	}
-	return result
 }

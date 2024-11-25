@@ -1,3 +1,4 @@
+/res/*
 # 忽略main下的编译后文件
 src/project01/main/*
 !src/project01/main/*.go
