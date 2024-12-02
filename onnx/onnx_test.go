@@ -1,4 +1,4 @@
-package main
+package onnx
 
 import (
 	"fmt"
@@ -38,9 +38,9 @@ func TestOnnxCPU(t *testing.T) {
 	if err != nil {
 		log.Fatalf("获取模型input失败: %v", err)
 	}
-	inputIds64 := convertToInt64Slice(inputIds)
-	attentionMask64 := convertToInt64Slice(attentionMask)
-	tokenTypeIDs64 := convertToInt64Slice(tokenTypeIDs)
+	inputIds64 := GetInt64Slice(inputIds)
+	attentionMask64 := GetInt64Slice(attentionMask)
+	tokenTypeIDs64 := GetInt64Slice(tokenTypeIDs)
 	// convert to tensor
 	inputIdsTensor, err := ort.NewTensor[int64]([]int64{1, int64(len(inputIds64))}, inputIds64)
 	if err != nil {

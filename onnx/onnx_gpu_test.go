@@ -1,14 +1,16 @@
-package main
+// CUDA的options设置,如何知道我使用的是哪张卡？
+package onnx
 
 import (
 	"fmt"
 	"log"
+	"testing"
 	"time"
 
 	ort "github.com/yalue/onnxruntime_go"
 )
 
-func main() {
+func TestOnnxGPU(t *testing.T) {
 	// 初始化 ONNX Runtime环境
 	err := ort.InitializeEnvironment()
 	if err != nil {
@@ -37,9 +39,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("获取模型input失败: %v", err)
 	}
-	inputIds64 := convertToInt64Slice(inputIds)
-	attentionMask64 := convertToInt64Slice(attentionMask)
-	tokenTypeIDs64 := convertToInt64Slice(tokenTypeIDs)
+	inputIds64 := GetInt64Slice(inputIds)
+	attentionMask64 := GetInt64Slice(attentionMask)
+	tokenTypeIDs64 := GetInt64Slice(tokenTypeIDs)
 	// convert to tensor
 	inputIdsTensor, err := ort.NewTensor[int64]([]int64{1, int64(len(inputIds64))}, inputIds64)
 	if err != nil {
