@@ -1,0 +1,13 @@
+database:
+  host: "175.178.127.187"
+  port: 6666
+  user: "quant"
+  password: "tidaltail@quant"
+  name: "AddressCheck"
+
+onnx:
+  modelPath: "/res/flag_embedding_model.onnx"
+  use_gpu: true
+
+server:
+  port: ":11260"
